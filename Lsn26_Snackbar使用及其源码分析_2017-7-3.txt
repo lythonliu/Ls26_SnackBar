@@ -1,0 +1,169 @@
+ Snackbar使用及其源码分析，NavigationView使用及MVP思想如何在源码中体现的
+ Snackbar
+ dialog  笨拙  体验大打折扣，会阻断用户的连段性 ，交互性太强   
+ 
+ 
+ 
+ Toast   没有交互性  （只能交互 ）
+ 
+ Android   Support Library  （TextView）
+ 
+ 
+ 
+
+Android Design Support Library
+　  Navigation View——抽屉导航
+　　TextInputLayout——EditText悬浮标签
+　　Floating Action Button——悬浮操作按钮
+　　Snackbar——提示（类似Toast）
+　　TabLayout——选项卡
+　　CoordinatorLayout——滚动控制
+　　CollapsingToolbarLayout——可折叠的Toolbar（Google+、photos中的效果）
+　　AppBarLayout——容器AppBar
+
+SnackBar 
+   1.SnackBar可以自动消失，也可以手动取消, 而Toast虽然可以手动取消, 但是无法一直显示
+ 
+ 
+ 2 Snackbar类似dialog, 生命周期跟随当前Activity,  FrameLayout.addView()
+ 
+ 3 显示在最上层  没用控件可以覆盖它
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+而Toast跟当前Activity没有关系  .在Activity结束的时候，SnackBar会消失，这点Toast不会
+
+
+CoordinatorLayout作为“super-powered FrameLayout”基本实现两个功能： 
+1、作为顶层布局 
+2、调度协调子布局 
+
+扩展或者缩小Toolbar或者头部，让主内容区域有更多的空间。
+
+控制哪个view应该扩展还是收缩，以及其显示大小比例，包括视差滚动效果动画
+
+
+浮动操作按钮与Snackbar
+
+
+
+
+
+源码分析
+ 
+看源码可以学习很多东西  用来制作浮动全局视图
+ 
+ 
+ findSuitableParent  寻找activity  的根布局
+ 
+make  给 mView 赋值
+
+
+
+show()  
+	 mTargetParent寻找父布局的View  
+     mTargetParent.addView(mView);
+	 WindownManger
+	 
+------------------------------------------------------------------------------------------
+提示错误信息   
+ 
+ 
+ 1个TextInputLayout只能包1个EditTExt。
+1、setHint();设置提示语
+3、setErrorEnabled();设置错误信息是否显示。true显示，false不显示。
+4、getEditText();得到EditText的控件实例。
+
+
+---------------------------------------------------------------------------
+
+　  Navigation View——抽屉导航
+ 
+ app:headerLayout="@layout/headlayout"
+头部控件
+app:menu="@menu/main"
+
+
+菜单区域
+哎  发现图标的颜色都是灰色哎  ，怎么办呢
+设置图表颜色
+app:itemIconTint="@color/colorAccent"
+ 现在图表变成了黄色
+如何显示图表本身的颜色呢
+navigationView.setItemIconTintList(null);
+
+
+
+
+NavigationView继承自framelayout  不管怎么样创建视图  显示
+
+
+NavigationMenuPresenter  数据刷新    创建视图  P
+
+
+
+
+NavigationMenu  加载数据  非常偷懒    
+
+
+mvc
+activity
+
+C:MV
+
+mvp
+ 
+ 
+在MVP里，Presenter完全把Model和View进行了分离，主要的程序逻辑在Presenter里实现。
+而且，Presenter与具体的View是没有直接关联的，
+而是通过定义好的接口进行交互，从而使得在变更View时候可以保持Presenter的不变。View层显示功能，除此就不应该有更多的内容，绝不容许直接访问Model，这就是与MVC很大的不同之处。
+
+        mPresenter.setId(PRESENTER_NAVIGATION_VIEW_ID);
+        mPresenter.initForMenu(context, mMenu);
+        mPresenter.setItemIconTintList(itemIconTint);
+        if (textAppearanceSet) {
+            mPresenter.setItemTextAppearance(textAppearance);
+        }
+        mPresenter.setItemTextColor(itemTextColor);
+        mPresenter.setItemBackground(itemBackground);
+		persenter  
+
+
+
+//------------------后续  还没讲完-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
